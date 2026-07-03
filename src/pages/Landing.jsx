@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Radio, Phone, ChevronUp, Music, Calendar, Mic, Globe } from 'lucide-react';
+import { Radio, Phone, ChevronUp, Music, Calendar, Mic, Globe, Megaphone } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { LANGUAGES, t } from '@/lib/i18n';
 import { useLanguage } from '@/lib/useLanguage';
@@ -211,6 +211,64 @@ export default function Landing() {
               );
             })}
           </div>
+
+          {/* TUESDAY & FRIDAY CALL-IN — TOP 3 BY LANGUAGE */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }} className="mb-16">
+            <div className="flex items-center gap-3 mb-2">
+              <Megaphone className="text-[#F5C200]" size={24} />
+              <h3 className="text-2xl font-black text-white">Tuesday & Friday Call-In Topics</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-6">The 3 latest top issues from each community language channel — discussed live every Tuesday & Friday</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { code: 'en', label: 'English', flag: '🇺🇸' },
+                { code: 'es', label: 'Español', flag: '🇲🇽' },
+                { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+                { code: 'zh', label: '中文', flag: '🇨🇳' },
+                { code: 'tl', label: 'Tagalog', flag: '🇵🇭' },
+              ].map(({ code, label, flag }) => {
+                const channelIssues = issues
+                  .filter(i => i.submitter_language === code)
+                  .sort((a, b) => b.vote_count - a.vote_count)
+                  .slice(0, 3);
+                return (
+                  <div key={code} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+                    <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10">
+                      <span className="text-lg">{flag}</span>
+                      <span className="text-white font-bold text-sm">{label}</span>
+                      <span className="ml-auto text-xs text-gray-500">{channelIssues.length} issue{channelIssues.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    {channelIssues.length === 0 ? (
+                      <div className="px-4 py-5 text-gray-600 text-xs italic">No issues submitted yet in this language.</div>
+                    ) : (
+                      <div className="divide-y divide-white/5">
+                        {channelIssues.map((issue, rank) => (
+                          <div key={issue.id} className="flex items-start gap-3 px-4 py-3">
+                            <span className={`text-xs font-black mt-0.5 min-w-[18px] ${rank === 0 ? 'text-[#F5C200]' : 'text-gray-600'}`}>#{rank + 1}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white text-xs font-semibold leading-snug">{issue.title}</p>
+                              <div className="flex items-center gap-1 mt-1">
+                                <ChevronUp size={10} className="text-[#F5C200]" />
+                                <span className="text-[#F5C200] text-[10px] font-bold">{issue.vote_count || 0}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="px-4 py-3 border-t border-white/5">
+                      <button
+                        onClick={() => requireVerification('callin')}
+                        className="w-full text-xs font-bold text-[#F5C200] py-2 rounded-xl border border-[#F5C200]/30 hover:bg-[#F5C200]/10 transition-colors flex items-center justify-center gap-1"
+                      >
+                        <Phone size={10} /> Call In for {label}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
 
           {/* VOTING SECTION */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }}>
