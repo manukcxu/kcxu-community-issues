@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "generated_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "content": {
+      "type": "string"
+    },
+    "email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "email_sent_at": {
+      "type": "string"
+    },
+    "seeded_to_issues": {
+      "type": "boolean",
+      "default": false
+    },
+    "issue_count": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "generated_date",
+    "content"
+  ],
+  "name": "WeeklyResearchReport"
+}

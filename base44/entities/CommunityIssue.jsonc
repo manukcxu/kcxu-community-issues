@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "submitter_name": {
+      "type": "string"
+    },
+    "submitter_phone": {
+      "type": "string"
+    },
+    "submitter_language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "es",
+        "vi",
+        "zh",
+        "tl"
+      ],
+      "default": "en"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "featured",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "vote_count": {
+      "type": "number",
+      "default": 0
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "pin_rank": {
+      "type": "number"
+    },
+    "submitted_by_admin": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "submitter_name",
+    "submitter_phone"
+  ],
+  "name": "CommunityIssue"
+}

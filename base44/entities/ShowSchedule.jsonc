@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "time_slot": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ],
+      "default": "morning"
+    },
+    "topic": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "linked_issue_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "date",
+    "time_slot",
+    "topic"
+  ],
+  "name": "ShowSchedule"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "artist": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "es",
+        "vi",
+        "zh",
+        "tl"
+      ],
+      "default": "en"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "played",
+        "skipped"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "name",
+    "phone",
+    "song_title",
+    "artist"
+  ],
+  "name": "SongRequest"
+}

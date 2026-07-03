@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "es",
+        "vi",
+        "zh",
+        "tl"
+      ],
+      "default": "en"
+    },
+    "connection_type": {
+      "type": "string",
+      "enum": [
+        "webrtc",
+        "phone"
+      ],
+      "default": "webrtc"
+    },
+    "song_request_artist": {
+      "type": "string"
+    },
+    "song_request_title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "live",
+        "muted",
+        "blocked",
+        "completed"
+      ],
+      "default": "queued"
+    },
+    "queue_position": {
+      "type": "number"
+    },
+    "residency_declared": {
+      "type": "boolean",
+      "default": false
+    },
+    "chatbot_mode": {
+      "type": "string",
+      "enum": [
+        "text",
+        "avatar"
+      ],
+      "default": "text"
+    }
+  },
+  "required": [
+    "name",
+    "phone"
+  ],
+  "name": "CallerQueue"
+}

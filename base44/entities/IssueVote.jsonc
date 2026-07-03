@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "issue_id": {
+      "type": "string"
+    },
+    "voter_phone": {
+      "type": "string"
+    },
+    "voter_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "issue_id",
+    "voter_phone"
+  ],
+  "name": "IssueVote"
+}
