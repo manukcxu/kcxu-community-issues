@@ -1,27 +1,38 @@
 import { useState } from 'react';
 import { t } from '@/lib/i18n';
 import { X, MapPin } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 
 export default function ResidencyModal({ lang, onVerified, onClose }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [declared, setDeclared] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!declared || !name || !phone) return;
     setLoading(true);
-    await new Promise(r => setTimeout(r, 500));
-    const verification = { name, phone, lang, verified: true, timestamp: Date.now() };
-    sessionStorage.setItem('kcxu_verified', JSON.stringify(verification));
+    setError(null);
+    try {
+      const existing = await base44.entities.ResidentVerification.filter({ phone });
+      if (existing.length === 0) {
+        await base44.entities.ResidentVerification.create({ name, phone, language: lang, declared: true });
+      }
+      const verification = { name, phone, lang, verified: true, timestamp: Date.now() };
+      sessionStorage.setItem('kcxu_verified', JSON.stringify(verification));
+      onVerified(verification);
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong. Please try again.');
+    }
     setLoading(false);
-    onVerified(verification);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-      <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70" onClick={onClose}>
+      <div className="relative bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="bg-[#2D2D2D] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <MapPin className="text-[#D32F2F]" size={22} />
@@ -39,7 +50,8 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
               value={name}
               onChange={e => setName(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:border-transparent"
+              autoFocus
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2D2D2D] bg-white focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:border-transparent"
             />
           </div>
           <div>
@@ -49,7 +61,7 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
               onChange={e => setPhone(e.target.value)}
               required
               type="tel"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:border-transparent"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2D2D2D] bg-white focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:border-transparent"
             />
           </div>
           <label className="flex items-start gap-3 cursor-pointer">
@@ -61,6 +73,7 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
             />
             <span className="text-sm text-[#2D2D2D] font-medium">{t(lang, 'residency_declare')}</span>
           </label>
+          {error && <p className="text-[#D32F2F] text-sm font-medium">{error}</p>}
           <button
             type="submit"
             disabled={!declared || !name || !phone || loading}

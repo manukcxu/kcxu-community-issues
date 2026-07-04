@@ -129,7 +129,7 @@ export default function Landing() {
       <section className="pt-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#2D2D2D] to-[#1a1a1a]" />
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-60"
+          className="absolute inset-0 bg-cover bg-center opacity-30"
           style={{ backgroundImage: "url('https://media.base44.com/images/public/6a47d74833e614b0c8920a23/c2a457b56_AlendraOnAirKCXU.png')" }}
         />
         <div className="absolute top-0 left-0 w-96 h-96 bg-[#D32F2F]/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
@@ -149,6 +149,36 @@ export default function Landing() {
               </p>
             </motion.div>
           </div>
+
+          {/* TOP 3 */}
+          <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.6, delay: 0.15 }} className="mb-10">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-2">{t(lang, 'top3_title')}</h2>
+              <p className="text-gray-400">{t(lang, 'top3_subtitle')}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[0, 1, 2].map(idx => {
+                const issue = top3[idx];
+                return (
+                  <div key={idx} className={`rounded-3xl border-2 p-6 h-full ${idx === 0 ? 'border-[#D32F2F] bg-[#D32F2F]/10' : 'border-white/10 bg-white/5'}`}>
+                    <div className={`text-5xl font-black mb-4 ${idx === 0 ? 'text-[#D32F2F]' : 'text-gray-600'}`}>#{idx + 1}</div>
+                    {issue ? (
+                      <>
+                        <h3 className="text-white font-bold text-lg mb-2 leading-snug">{issue.title}</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">{issue.description}</p>
+                        <div className="mt-4 flex items-center gap-2">
+                          <ChevronUp size={16} className="text-[#D32F2F]" />
+                          <span className="text-[#D32F2F] font-bold text-sm">{issue.vote_count || 0} votes</span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-gray-600 text-sm italic">No issue yet — submit yours!</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
 
           {/* Radio Player */}
           <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.6, delay: 0.2 }} className="max-w-3xl mx-auto mb-10">
@@ -189,35 +219,6 @@ export default function Landing() {
       {/* TOP 3 */}
       <section id="issues" className="py-16 bg-[#1a1a1a]">
         <div className="max-w-6xl mx-auto px-4">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-2">{t(lang, 'top3_title')}</h2>
-            <p className="text-gray-400">{t(lang, 'top3_subtitle')}</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {[0, 1, 2].map(idx => {
-              const issue = top3[idx];
-              return (
-                <motion.div key={idx} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6, delay: idx * 0.1 }}>
-                  <div className={`rounded-3xl border-2 p-6 h-full ${idx === 0 ? 'border-[#D32F2F] bg-[#D32F2F]/10' : 'border-white/10 bg-white/5'}`}>
-                    <div className={`text-5xl font-black mb-4 ${idx === 0 ? 'text-[#D32F2F]' : 'text-gray-600'}`}>#{idx + 1}</div>
-                    {issue ? (
-                      <>
-                        <h3 className="text-white font-bold text-lg mb-2 leading-snug">{issue.title}</h3>
-                        <p className="text-gray-400 text-sm leading-relaxed">{issue.description}</p>
-                        <div className="mt-4 flex items-center gap-2">
-                          <ChevronUp size={16} className="text-[#D32F2F]" />
-                          <span className="text-[#D32F2F] font-bold text-sm">{issue.vote_count || 0} votes</span>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="text-gray-600 text-sm italic">No issue yet — submit yours!</div>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
           {/* CALL-IN NUMBER BANNER */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }} className="mb-12">
             <a href="tel:+14085061772" className="flex flex-col sm:flex-row items-center justify-center gap-4 bg-[#D32F2F] rounded-3xl px-6 py-6 hover:bg-[#B71C1C] transition-colors shadow-lg shadow-[#D32F2F]/20">
