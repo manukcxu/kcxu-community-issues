@@ -24,6 +24,17 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
   const recognitionRef = useRef(null);
 
   const speakRef = useRef(null);
+  const announcedRef = useRef(false);
+
+  const AVATAR_ANNOUNCEMENT = 'Welcome to KCXU 92.7 FM! Community issues are voiced live every Monday and Friday for one hour, covering the current issues facing our community. Any resident of Santa Clara County over 18 years old may voice their opinion on air.';
+
+  const handleSpeakReady = (fn) => {
+    speakRef.current = fn;
+    if (!announcedRef.current) {
+      announcedRef.current = true;
+      addMsg('bot', AVATAR_ANNOUNCEMENT);
+    }
+  };
 
   const addMsg = (role, text) => {
     setMessages(prev => [...prev, { role, text, id: Date.now() + Math.random() }]);
@@ -161,7 +172,7 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
         </div>
-        {mode === 'avatar' && <HeygenAvatarSession onSpeakReady={(fn) => { speakRef.current = fn; }} />}
+        {mode === 'avatar' && <HeygenAvatarSession onSpeakReady={handleSpeakReady} />}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style={{ minHeight: 280, maxHeight: 380 }}>
           {messages.map(msg => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
