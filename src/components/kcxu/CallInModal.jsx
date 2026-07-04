@@ -38,7 +38,7 @@ export default function CallInModal({ lang, verification, onClose, initialMode =
           </button>
         </div>
         <div className="p-6">
-          <p className="text-gray-500 text-sm mb-6 text-center">Choose how you'd like to connect with the KCXU host</p>
+          <p className="text-gray-500 text-sm mb-6 text-center">{t(lang, 'choose_connect')}</p>
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => setMode('text')}
@@ -66,7 +66,7 @@ export default function CallInModal({ lang, verification, onClose, initialMode =
             </button>
           </div>
           <div className="mt-5 text-center text-sm text-gray-500">
-            Or call in directly: <a href="tel:+14085061772" className="font-bold text-[#D32F2F]">408.506.1772</a>
+            {t(lang, 'or_call_direct')} <a href="tel:+14085061772" className="font-bold text-[#D32F2F]">408.506.1772</a>
           </div>
         </div>
       </div>

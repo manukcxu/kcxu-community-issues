@@ -101,7 +101,7 @@ export default function Landing() {
             <a href="#schedule" className="text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">{t(lang, 'nav_schedule')}</a>
             <a href="#song" className="text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">{t(lang, 'nav_song')}</a>
             <button onClick={() => requireVerification('avatar')} className="flex items-center gap-1.5 text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">
-              <User size={14} /> AI Host
+              <User size={14} /> {t(lang, 'nav_ai_host')}
             </button>
           </div>
           <div className="flex items-center gap-3">
@@ -169,12 +169,12 @@ export default function Landing() {
                         <p className="text-gray-400 text-sm leading-relaxed">{issue.description}</p>
                         <div className="mt-4 flex items-center gap-2">
                           <ChevronUp size={16} className="text-[#D32F2F]" />
-                          <span className="text-[#D32F2F] font-bold text-sm">{issue.vote_count || 0} votes</span>
+                          <span className="text-[#D32F2F] font-bold text-sm">{issue.vote_count || 0} {t(lang, 'votes_label')}</span>
                         </div>
-                        <CallInSchedule weekOffset={idx} />
+                        <CallInSchedule weekOffset={idx} lang={lang} />
                       </>
                     ) : (
-                      <div className="text-gray-600 text-sm italic">No issue yet — submit yours!</div>
+                      <div className="text-gray-600 text-sm italic">{t(lang, 'no_issue_yet')}</div>
                     )}
                   </div>
                 );
@@ -187,7 +187,7 @@ export default function Landing() {
             <div className="bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Radio size={16} className="text-[#D32F2F]" />
-                <span className="text-[#D32F2F] text-sm font-bold uppercase tracking-wider">KCXU 92.7 FM — Live Stream</span>
+                <span className="text-[#D32F2F] text-sm font-bold uppercase tracking-wider">{t(lang, 'live_stream_label')}</span>
               </div>
               <div className="rounded-2xl overflow-hidden mb-3">
                 <img
@@ -234,7 +234,7 @@ export default function Landing() {
             <a href="tel:+14085061772" className="flex flex-col sm:flex-row items-center justify-center gap-4 bg-[#D32F2F] rounded-3xl px-6 py-6 hover:bg-[#B71C1C] transition-colors shadow-lg shadow-[#D32F2F]/20">
               <Phone size={28} className="text-white" />
               <div className="text-center sm:text-left">
-                <div className="text-white/80 text-xs font-bold uppercase tracking-widest">Call In Live — Mondays &amp; Fridays</div>
+                <div className="text-white/80 text-xs font-bold uppercase tracking-widest">{t(lang, 'callin_banner_label')}</div>
                 <div className="text-white font-black text-3xl md:text-4xl tracking-wide">408.506.1772</div>
               </div>
             </a>
@@ -244,9 +244,9 @@ export default function Landing() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }} className="mb-16">
             <div className="flex items-center gap-3 mb-2">
               <Megaphone className="text-[#D32F2F]" size={24} />
-              <h3 className="text-2xl font-black text-white">Monday & Friday Call-In Topics</h3>
+              <h3 className="text-2xl font-black text-white">{t(lang, 'topics_title')}</h3>
             </div>
-            <p className="text-gray-400 text-sm mb-6">The 3 latest top issues from each community language channel — discussed live every Monday & Friday</p>
+            <p className="text-gray-400 text-sm mb-6">{t(lang, 'topics_subtitle')}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { code: 'en', label: 'English', flag: '🇺🇸' },
@@ -264,10 +264,10 @@ export default function Landing() {
                     <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10">
                       <span className="text-lg">{flag}</span>
                       <span className="text-white font-bold text-sm">{label}</span>
-                      <span className="ml-auto text-xs text-gray-500">{channelIssues.length} issue{channelIssues.length !== 1 ? 's' : ''}</span>
+                      <span className="ml-auto text-xs text-gray-500">{channelIssues.length} {t(lang, 'issues_word')}</span>
                     </div>
                     {channelIssues.length === 0 ? (
-                      <div className="px-4 py-5 text-gray-600 text-xs italic">No issues submitted yet in this language.</div>
+                      <div className="px-4 py-5 text-gray-600 text-xs italic">{t(lang, 'no_issues_lang')}</div>
                     ) : (
                       <div className="divide-y divide-white/5">
                         {channelIssues.map((issue, rank) => (
@@ -289,7 +289,7 @@ export default function Landing() {
                         onClick={() => requireVerification('callin')}
                         className="w-full text-xs font-bold text-[#D32F2F] py-2 rounded-xl border border-[#D32F2F]/30 hover:bg-[#D32F2F]/10 transition-colors flex items-center justify-center gap-1"
                       >
-                        <Phone size={10} /> Call In for {label}
+                        <Phone size={10} /> {t(lang, 'callin_for')} {label}
                       </button>
                     </div>
                   </div>
@@ -304,7 +304,7 @@ export default function Landing() {
             <p className="text-gray-400 text-sm mb-6">{t(lang, 'vote_subtitle')}</p>
             <div className="space-y-3">
               {issues.length === 0 && (
-                <div className="text-gray-500 text-sm py-6 text-center">No community issues yet. Be the first to submit one!</div>
+                <div className="text-gray-500 text-sm py-6 text-center">{t(lang, 'no_issues_yet')}</div>
               )}
               {issues.map(issue => (
                 <div key={issue.id} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
@@ -342,17 +342,17 @@ export default function Landing() {
           </motion.div>
           <div className="space-y-3">
             {schedule.length === 0 && (
-              <div className="text-gray-500 text-sm text-center py-8">No upcoming shows scheduled yet.</div>
+              <div className="text-gray-500 text-sm text-center py-8">{t(lang, 'no_shows')}</div>
             )}
             {schedule.map((session, idx) => (
               <motion.div key={session.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.5, delay: idx * 0.05 }}>
                 <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-6 py-4">
                   <div className="text-center min-w-[70px]">
                     <div className="text-[#D32F2F] font-black text-sm">
-                      {new Date(session.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      {new Date(session.date).toLocaleDateString(t(lang, 'date_locale'), { month: 'short', day: 'numeric' })}
                     </div>
                     <div className="text-gray-500 text-xs">
-                      {new Date(session.date).toLocaleDateString('en-US', { weekday: 'short' })}
+                      {new Date(session.date).toLocaleDateString(t(lang, 'date_locale'), { weekday: 'short' })}
                     </div>
                   </div>
                   <div className="w-px h-10 bg-white/10" />
@@ -409,7 +409,7 @@ export default function Landing() {
           </div>
           <div className="text-center text-gray-500 text-sm">
             <p>{t(lang, 'footer_address')}</p>
-            <p className="mt-1">General Questions: <a href="tel:+16692914800" className="text-white font-semibold hover:text-[#D32F2F] transition-colors">669.291.4800</a></p>
+            <p className="mt-1">{t(lang, 'general_questions')} <a href="tel:+16692914800" className="text-white font-semibold hover:text-[#D32F2F] transition-colors">669.291.4800</a></p>
             <p className="mt-1">contact@kcxu.org</p>
           </div>
           <Link to="/admin" className="text-gray-600 hover:text-gray-400 text-xs transition-colors">Admin</Link>
