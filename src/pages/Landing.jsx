@@ -9,6 +9,7 @@ import ResidencyModal from '@/components/kcxu/ResidencyModal';
 import CallInModal from '@/components/kcxu/CallInModal';
 import IssueSubmitModal from '@/components/kcxu/IssueSubmitModal';
 import SongRequestModal from '@/components/kcxu/SongRequestModal';
+import Logo from '@/components/kcxu/Logo';
 
 export default function Landing() {
   const { lang, changeLang } = useLanguage();
@@ -88,9 +89,7 @@ export default function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#2D2D2D]/95 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#D32F2F] rounded-full flex items-center justify-center">
-              <Radio size={18} className="text-white" />
-            </div>
+            <Logo size={40} />
             <div>
               <div className="font-black text-white text-sm leading-none">KCXU 92.7 FM</div>
               <div className="text-[#D32F2F] text-[9px] font-semibold tracking-widest uppercase">Santa Clara County</div>
@@ -384,9 +383,7 @@ export default function Landing() {
       <footer className="bg-[#1a1a1a] border-t border-white/10 py-10">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#D32F2F] rounded-full flex items-center justify-center">
-              <Radio size={18} className="text-white" />
-            </div>
+            <Logo size={40} />
             <div>
               <div className="font-black text-white">KCXU 92.7 FM</div>
               <div className="text-[#D32F2F] text-xs">{t(lang, 'footer_tagline')}</div>
