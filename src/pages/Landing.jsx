@@ -202,14 +202,15 @@ export default function Landing() {
                   className="w-full h-48 md:h-64 object-cover"
                 />
               </div>
-              <div className="rounded-2xl overflow-hidden bg-black/30">
-                <iframe
-                  src="https://player.radio.co/p/kcxu"
-                  frameBorder="0"
-                  allow="autoplay"
-                  className="w-full h-20 md:h-24"
-                  title="KCXU 92.7 FM Live Stream"
-                />
+              <div className="rounded-2xl bg-black/30 p-4">
+                <audio
+                  controls
+                  preload="none"
+                  className="w-full"
+                  src="https://streams.radio.co/s5af3914a4/listen"
+                >
+                  Your browser does not support the audio player.
+                </audio>
               </div>
             </div>
           </motion.div>
