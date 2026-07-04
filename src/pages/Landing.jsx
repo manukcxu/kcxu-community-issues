@@ -11,6 +11,7 @@ import IssueSubmitModal from '@/components/kcxu/IssueSubmitModal';
 import SongRequestModal from '@/components/kcxu/SongRequestModal';
 import Logo from '@/components/kcxu/Logo';
 import CallInSchedule from '@/components/kcxu/CallInSchedule';
+import { useTranslatedIssues } from '@/hooks/useTranslatedIssues';
 
 export default function Landing() {
   const { lang, changeLang } = useLanguage();
@@ -46,10 +47,12 @@ export default function Landing() {
     } catch (e) { console.error(e); }
   };
 
-  const top3 = [...issues].filter(i => i.is_pinned).sort((a, b) => (a.pin_rank || 99) - (b.pin_rank || 99)).slice(0, 3);
-  const remaining = issues.filter(i => !top3.find(t => t.id === i.id));
+  const displayIssues = useTranslatedIssues(issues, lang);
+
+  const top3 = [...displayIssues].filter(i => i.is_pinned).sort((a, b) => (a.pin_rank || 99) - (b.pin_rank || 99)).slice(0, 3);
+  const remaining = displayIssues.filter(i => !top3.find(t => t.id === i.id));
   if (top3.length < 3) {
-    const fill = [...issues].sort((a, b) => b.vote_count - a.vote_count).filter(i => !top3.find(t => t.id === i.id));
+    const fill = [...displayIssues].sort((a, b) => b.vote_count - a.vote_count).filter(i => !top3.find(t => t.id === i.id));
     while (top3.length < 3 && fill.length > 0) top3.push(fill.shift());
   }
 
@@ -255,7 +258,7 @@ export default function Landing() {
                 { code: 'zh', label: '中文', flag: '🇨🇳' },
                 { code: 'tl', label: 'Tagalog', flag: '🇵🇭' },
               ].map(({ code, label, flag }) => {
-                const channelIssues = issues
+                const channelIssues = displayIssues
                   .filter(i => i.submitter_language === code)
                   .sort((a, b) => b.vote_count - a.vote_count)
                   .slice(0, 3);
@@ -303,10 +306,10 @@ export default function Landing() {
             <h3 className="text-xl font-black text-white mb-2">{t(lang, 'vote_title')}</h3>
             <p className="text-gray-400 text-sm mb-6">{t(lang, 'vote_subtitle')}</p>
             <div className="space-y-3">
-              {issues.length === 0 && (
+              {displayIssues.length === 0 && (
                 <div className="text-gray-500 text-sm py-6 text-center">{t(lang, 'no_issues_yet')}</div>
               )}
-              {issues.map(issue => (
+              {displayIssues.map(issue => (
                 <div key={issue.id} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
                   <button
                     onClick={() => handleVote(issue)}
