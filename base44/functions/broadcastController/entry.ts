@@ -8,6 +8,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
+    // --- Start alert ---
+    const startedAt = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    await base44.asServiceRole.integrations.Core.SendEmail({
+      to: user.email,
+      from_name: 'KCXU Broadcast Alerts',
+      subject: '🔴 KCXU Broadcast Test STARTED',
+      body: `The HeyGen broadcast test started at ${startedAt} PT.\n\nDuration: 5 minutes. You will receive another alert when it completes.`
+    });
+
     // --- System checks (dry run: no audio is pushed to Radio.co) ---
     const radioPassword = Deno.env.get('RADIO_CO_PASSWORD');
     const heygenKey = Deno.env.get('HEYGEN_API_KEY');
@@ -41,6 +50,15 @@ Deno.serve(async (req) => {
       duration_minutes: 5,
       time_slot: 'evening',
       notes: `DRY RUN — no audio was sent to Radio.co.\n\nSystem checks: ${JSON.stringify(checks, null, 2)}\n\n--- GENERATED SHOW SCRIPT ---\n\n${script}`
+    });
+
+    // --- Completion alert ---
+    const endedAt = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    await base44.asServiceRole.integrations.Core.SendEmail({
+      to: user.email,
+      from_name: 'KCXU Broadcast Alerts',
+      subject: '✅ KCXU Broadcast Test COMPLETED',
+      body: `The HeyGen broadcast test completed successfully at ${endedAt} PT.\n\nSystem checks:\n- Radio.co credentials: ${checks.radio_co_credentials ? 'OK' : 'MISSING'}\n- HeyGen API key: ${checks.heygen_api_key ? 'OK' : 'MISSING'}\n- HeyGen reachable: ${checks.heygen_reachable ? 'OK' : 'FAILED'}\n\nThe show script and recording notes are saved in your admin dashboard under Recordings.`
     });
 
     return Response.json({ success: true, checks, recording_id: recording.id });
