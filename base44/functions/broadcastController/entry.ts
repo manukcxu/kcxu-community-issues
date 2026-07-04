@@ -8,14 +8,25 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // --- Start alert ---
+    // --- Fetch top community issues (also used for the going-live alert) ---
+    const issues = await base44.asServiceRole.entities.CommunityIssue.filter({ status: 'approved' }, '-vote_count', 5);
+    const topIssue = issues[0];
+
+    // --- Going-live alert ---
     const startedAt = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-    await base44.asServiceRole.integrations.Core.SendEmail({
-      to: user.email,
-      from_name: 'KCXU Broadcast Alerts',
-      subject: '🔴 KCXU Broadcast Test STARTED',
-      body: `The HeyGen broadcast test started at ${startedAt} PT.\n\nDuration: 5 minutes. You will receive another alert when it completes.`
-    });
+    const liveBody = `🔴 KCXU Community Issues is NOW GOING LIVE.\n\nStarted at: ${startedAt} PT\nDuration: 5 minutes\n\nTop issue to be talked about:\n${topIssue ? `"${topIssue.title}" — ${topIssue.description} (${topIssue.vote_count || 0} votes)` : 'No approved issues yet — general community-welcome segment.'}\n\nYou will receive another alert when the broadcast completes.`;
+    for (const recipient of ['dj@kcxu.live', user.email]) {
+      try {
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: recipient,
+          from_name: 'KCXU Community Issues — Live Broadcast',
+          subject: '🔴 GOING LIVE: KCXU Community Issues Broadcast',
+          body: liveBody
+        });
+      } catch (e) {
+        console.warn(`Could not send going-live alert to ${recipient}: ${e.message}`);
+      }
+    }
 
     // --- System checks (dry run: no audio is pushed to Radio.co) ---
     const radioPassword = Deno.env.get('RADIO_CO_PASSWORD');
@@ -36,7 +47,6 @@ Deno.serve(async (req) => {
     }
 
     // --- Build the show script from the top community issues ---
-    const issues = await base44.asServiceRole.entities.CommunityIssue.filter({ status: 'approved' }, '-vote_count', 5);
     const issueList = issues.map((i, n) => `${n + 1}. ${i.title} — ${i.description} (${i.vote_count || 0} votes)`).join('\n');
 
     const script = await base44.asServiceRole.integrations.Core.InvokeLLM({
