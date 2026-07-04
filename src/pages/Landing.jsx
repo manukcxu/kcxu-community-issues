@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Radio, Phone, ChevronUp, Music, Calendar, Mic, Globe, Megaphone } from 'lucide-react';
+import { Radio, Phone, ChevronUp, Music, Calendar, Mic, Globe, Megaphone, User } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { LANGUAGES, t } from '@/lib/i18n';
 import { useLanguage } from '@/lib/useLanguage';
@@ -99,6 +99,9 @@ export default function Landing() {
             <a href="#issues" className="text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">{t(lang, 'nav_issues')}</a>
             <a href="#schedule" className="text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">{t(lang, 'nav_schedule')}</a>
             <a href="#song" className="text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">{t(lang, 'nav_song')}</a>
+            <button onClick={() => requireVerification('avatar')} className="flex items-center gap-1.5 text-gray-300 hover:text-[#D32F2F] text-sm font-medium transition-colors">
+              <User size={14} /> AI Host
+            </button>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 bg-white/10 rounded-xl p-1">
@@ -125,6 +128,10 @@ export default function Landing() {
       {/* HERO */}
       <section className="pt-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#2D2D2D] to-[#1a1a1a]" />
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-60"
+          style={{ backgroundImage: "url('https://media.base44.com/images/public/6a47d74833e614b0c8920a23/c2a457b56_AlendraOnAirKCXU.png')" }}
+        />
         <div className="absolute top-0 left-0 w-96 h-96 bg-[#D32F2F]/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#D32F2F]/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
         <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24">
@@ -420,6 +427,9 @@ export default function Landing() {
       )}
       {modal === 'callin' && (
         <CallInModal lang={lang} verification={verification} onClose={() => setModal(null)} />
+      )}
+      {modal === 'avatar' && (
+        <CallInModal lang={lang} verification={verification} initialMode="avatar" onClose={() => setModal(null)} />
       )}
       {modal === 'issue' && (
         <IssueSubmitModal lang={lang} verification={verification} onClose={() => { setModal(null); loadData(); }} />

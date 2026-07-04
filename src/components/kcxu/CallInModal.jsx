@@ -3,8 +3,8 @@ import { t } from '@/lib/i18n';
 import { X, MessageSquare, User } from 'lucide-react';
 import ChatbotModal from './ChatbotModal';
 
-export default function CallInModal({ lang, verification, onClose }) {
-  const [mode, setMode] = useState(null);
+export default function CallInModal({ lang, verification, onClose, initialMode = null }) {
+  const [mode, setMode] = useState(initialMode);
   const [queued, setQueued] = useState(null);
 
   if (queued) {
