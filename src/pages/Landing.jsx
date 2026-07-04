@@ -10,6 +10,7 @@ import CallInModal from '@/components/kcxu/CallInModal';
 import IssueSubmitModal from '@/components/kcxu/IssueSubmitModal';
 import SongRequestModal from '@/components/kcxu/SongRequestModal';
 import Logo from '@/components/kcxu/Logo';
+import CallInSchedule from '@/components/kcxu/CallInSchedule';
 
 export default function Landing() {
   const { lang, changeLang } = useLanguage();
@@ -161,15 +162,7 @@ export default function Landing() {
                 const issue = top3[idx];
                 return (
                   <div key={idx} className={`rounded-3xl border-2 p-6 h-full ${idx === 0 ? 'border-[#D32F2F] bg-[#1a1a1a]' : 'border-white/20 bg-[#1a1a1a]'}`}>
-                    <div className="flex items-center justify-between gap-3 mb-4">
-                      <div className={`text-5xl font-black ${idx === 0 ? 'text-[#D32F2F]' : 'text-gray-300'}`}>#{idx + 1}</div>
-                      {idx === 0 && (
-                        <a href="tel:+14085061772" className="flex items-center gap-2 bg-[#D32F2F] text-white rounded-xl px-3 py-2 hover:bg-[#B71C1C] transition-colors">
-                          <Phone size={14} />
-                          <span className="text-[11px] font-bold leading-tight">Call In Live<br />Mondays &amp; Fridays</span>
-                        </a>
-                      )}
-                    </div>
+                    <div className={`text-5xl font-black mb-4 ${idx === 0 ? 'text-[#D32F2F]' : 'text-gray-300'}`}>#{idx + 1}</div>
                     {issue ? (
                       <>
                         <h3 className="text-white font-bold text-lg mb-2 leading-snug">{issue.title}</h3>
@@ -178,6 +171,7 @@ export default function Landing() {
                           <ChevronUp size={16} className="text-[#D32F2F]" />
                           <span className="text-[#D32F2F] font-bold text-sm">{issue.vote_count || 0} votes</span>
                         </div>
+                        <CallInSchedule />
                       </>
                     ) : (
                       <div className="text-gray-600 text-sm italic">No issue yet — submit yours!</div>
