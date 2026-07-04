@@ -3,6 +3,7 @@ import { t } from '@/lib/i18n';
 import { X, Mic, MicOff, Send, Radio, User } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { base44 as sdk } from '@/api/base44Client';
+import HeygenAvatarSession from './HeygenAvatarSession';
 
 const STEPS = ['greeting', 'residency', 'name', 'phone', 'song_ask', 'song_details', 'confirm'];
 
@@ -22,8 +23,11 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
   const bottomRef = useRef(null);
   const recognitionRef = useRef(null);
 
+  const speakRef = useRef(null);
+
   const addMsg = (role, text) => {
     setMessages(prev => [...prev, { role, text, id: Date.now() + Math.random() }]);
+    if (role === 'bot' && speakRef.current) speakRef.current(text);
   };
 
   useEffect(() => {
@@ -147,59 +151,23 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
     setListening(true);
   };
 
-  if (mode === 'avatar') {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-        <div className="bg-[#2D2D2D] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-            <div className="flex items-center gap-2">
-              <Radio className="text-[#F5C200]" size={20} />
-              <span className="text-white font-bold">{t(lang, 'chatbot_title')}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs px-2 py-1 bg-[#F5C200] text-[#2D2D2D] font-bold rounded-full uppercase">{lang}</span>
-              <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
-            </div>
-          </div>
-          <div className="relative bg-gray-900 aspect-video flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-24 h-24 rounded-full bg-[#F5C200]/20 border-2 border-[#F5C200] flex items-center justify-center mx-auto mb-4">
-                <User size={48} className="text-[#F5C200]" />
-              </div>
-              <p className="text-white font-bold text-lg">KCXU Avatar Host</p>
-              <p className="text-gray-400 text-sm mt-1">HeyGen integration coming soon</p>
-              <div className="mt-4 px-4 py-2 bg-[#F5C200]/10 border border-[#F5C200]/30 rounded-xl mx-8">
-                <p className="text-[#F5C200] text-xs">Connect your HeyGen API key in Admin Settings to activate the live avatar</p>
-              </div>
-            </div>
-          </div>
-          <div className="px-6 py-4 flex items-center justify-center gap-4">
-            <button className="p-3 rounded-full bg-[#F5C200] text-[#2D2D2D]">
-              <Mic size={20} />
-            </button>
-            <span className="text-gray-400 text-sm">Avatar mode — API key required</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: '90vh' }}>
         <div className="bg-[#2D2D2D] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Radio className="text-[#F5C200]" size={20} />
+            <Radio className="text-[#D32F2F]" size={20} />
             <span className="text-white font-bold">{t(lang, 'chatbot_title')}</span>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
         </div>
+        {mode === 'avatar' && <HeygenAvatarSession onSpeakReady={(fn) => { speakRef.current = fn; }} />}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style={{ minHeight: 280, maxHeight: 380 }}>
           {messages.map(msg => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`rounded-2xl px-4 py-2 max-w-[80%] text-sm leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-[#F5C200] text-[#2D2D2D] font-medium'
+                  ? 'bg-[#D32F2F] text-white font-medium'
                   : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
               }`}>
                 {msg.text}
@@ -210,9 +178,9 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
             <div className="flex justify-start">
               <div className="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-sm">
                 <div className="flex gap-1">
-                  <span className="w-2 h-2 bg-[#F5C200] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-2 h-2 bg-[#F5C200] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-2 h-2 bg-[#F5C200] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <span className="w-2 h-2 bg-[#D32F2F] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 bg-[#D32F2F] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 bg-[#D32F2F] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -232,13 +200,13 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && sendMsg()}
               placeholder={t(lang, 'chatbot_type')}
-              className="flex-1 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C200]"
+              className="flex-1 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D32F2F]"
               disabled={step === 'done'}
             />
             <button
               onClick={sendMsg}
               disabled={!input.trim() || step === 'done'}
-              className="p-3 bg-[#F5C200] text-[#2D2D2D] rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-40"
+              className="p-3 bg-[#D32F2F] text-white rounded-xl hover:bg-[#B71C1C] transition-colors disabled:opacity-40"
             >
               <Send size={18} />
             </button>

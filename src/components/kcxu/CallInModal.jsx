@@ -11,8 +11,8 @@ export default function CallInModal({ lang, verification, onClose }) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
         <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-8 text-center">
-          <div className="w-16 h-16 bg-[#F5C200] rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-[#2D2D2D] font-black text-2xl">#{queued.queue_position}</span>
+          <div className="w-16 h-16 bg-[#D32F2F] rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-black text-2xl">#{queued.queue_position}</span>
           </div>
           <h3 className="text-[#2D2D2D] font-black text-xl mb-2">{t(lang, 'success_callin')}</h3>
           <p className="text-gray-500 text-sm">{t(lang, 'queue_position')}: #{queued.queue_position}</p>
@@ -42,9 +42,9 @@ export default function CallInModal({ lang, verification, onClose }) {
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => setMode('text')}
-              className="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-2xl hover:border-[#F5C200] hover:bg-[#F5C200]/5 transition-all group"
+              className="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-2xl hover:border-[#D32F2F] hover:bg-[#D32F2F]/5 transition-all group"
             >
-              <div className="w-12 h-12 bg-[#F5C200]/20 rounded-full flex items-center justify-center group-hover:bg-[#F5C200]/40 transition-colors">
+              <div className="w-12 h-12 bg-[#D32F2F]/20 rounded-full flex items-center justify-center group-hover:bg-[#D32F2F]/40 transition-colors">
                 <MessageSquare className="text-[#2D2D2D]" size={24} />
               </div>
               <div className="text-center">
@@ -54,9 +54,9 @@ export default function CallInModal({ lang, verification, onClose }) {
             </button>
             <button
               onClick={() => setMode('avatar')}
-              className="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-2xl hover:border-[#F5C200] hover:bg-[#F5C200]/5 transition-all group"
+              className="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-2xl hover:border-[#D32F2F] hover:bg-[#D32F2F]/5 transition-all group"
             >
-              <div className="w-12 h-12 bg-[#F5C200]/20 rounded-full flex items-center justify-center group-hover:bg-[#F5C200]/40 transition-colors">
+              <div className="w-12 h-12 bg-[#D32F2F]/20 rounded-full flex items-center justify-center group-hover:bg-[#D32F2F]/40 transition-colors">
                 <User className="text-[#2D2D2D]" size={24} />
               </div>
               <div className="text-center">
@@ -64,6 +64,9 @@ export default function CallInModal({ lang, verification, onClose }) {
                 <p className="text-gray-500 text-xs mt-1">{t(lang, 'chatbot_mode_b_desc')}</p>
               </div>
             </button>
+          </div>
+          <div className="mt-5 text-center text-sm text-gray-500">
+            Or call in directly: <a href="tel:+14085061772" className="font-bold text-[#D32F2F]">408.506.1772</a>
           </div>
         </div>
       </div>

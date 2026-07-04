@@ -22,8 +22,8 @@ export default function SongRequestModal({ lang, onClose }) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
         <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-8 text-center">
-          <div className="w-16 h-16 bg-[#F5C200] rounded-full flex items-center justify-center mx-auto mb-4">
-            <Music size={28} className="text-[#2D2D2D]" />
+          <div className="w-16 h-16 bg-[#D32F2F] rounded-full flex items-center justify-center mx-auto mb-4">
+            <Music size={28} className="text-white" />
           </div>
           <h3 className="text-[#2D2D2D] font-black text-xl mb-2">{t(lang, 'success_song')}</h3>
           <button onClick={onClose} className="mt-4 w-full bg-[#2D2D2D] text-white font-bold py-3 rounded-xl">{t(lang, 'form_cancel')}</button>
@@ -37,7 +37,7 @@ export default function SongRequestModal({ lang, onClose }) {
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
         <div className="bg-[#2D2D2D] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Music className="text-[#F5C200]" size={20} />
+            <Music className="text-[#D32F2F]" size={20} />
             <div>
               <h2 className="text-white font-bold">{t(lang, 'song_title')}</h2>
               <p className="text-gray-400 text-xs">{t(lang, 'song_subtitle')}</p>
@@ -59,11 +59,11 @@ export default function SongRequestModal({ lang, onClose }) {
                 value={form[key]}
                 onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C200]"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D32F2F]"
               />
             </div>
           ))}
-          <button type="submit" disabled={loading} className="w-full bg-[#F5C200] text-[#2D2D2D] font-bold py-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50">
+          <button type="submit" disabled={loading} className="w-full bg-[#D32F2F] text-white font-bold py-3 rounded-xl hover:bg-[#B71C1C] transition-colors disabled:opacity-50">
             {loading ? '...' : t(lang, 'form_submit')}
           </button>
         </form>

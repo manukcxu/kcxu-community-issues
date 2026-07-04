@@ -18,8 +18,8 @@ const AuthenticatedApp = () => {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-[#2D2D2D]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 bg-[#F5C200] rounded-full flex items-center justify-center">
-            <div className="w-5 h-5 border-2 border-[#2D2D2D] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 bg-[#D32F2F] rounded-full flex items-center justify-center">
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
           </div>
           <p className="text-gray-400 text-sm">Loading KCXU...</p>
         </div>

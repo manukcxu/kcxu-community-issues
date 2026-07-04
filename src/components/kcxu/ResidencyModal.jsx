@@ -24,7 +24,7 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
         <div className="bg-[#2D2D2D] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <MapPin className="text-[#F5C200]" size={22} />
+            <MapPin className="text-[#D32F2F]" size={22} />
             <h2 className="text-white font-bold text-lg">{t(lang, 'residency_title')}</h2>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
@@ -39,7 +39,7 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
               value={name}
               onChange={e => setName(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C200] focus:border-transparent"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:border-transparent"
             />
           </div>
           <div>
@@ -49,7 +49,7 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
               onChange={e => setPhone(e.target.value)}
               required
               type="tel"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C200] focus:border-transparent"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:border-transparent"
             />
           </div>
           <label className="flex items-start gap-3 cursor-pointer">
@@ -57,14 +57,14 @@ export default function ResidencyModal({ lang, onVerified, onClose }) {
               type="checkbox"
               checked={declared}
               onChange={e => setDeclared(e.target.checked)}
-              className="mt-1 accent-[#F5C200] w-4 h-4"
+              className="mt-1 accent-[#D32F2F] w-4 h-4"
             />
             <span className="text-sm text-[#2D2D2D] font-medium">{t(lang, 'residency_declare')}</span>
           </label>
           <button
             type="submit"
             disabled={!declared || !name || !phone || loading}
-            className="w-full bg-[#F5C200] text-[#2D2D2D] font-bold py-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full bg-[#D32F2F] text-white font-bold py-3 rounded-xl hover:bg-[#B71C1C] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading ? '...' : t(lang, 'residency_confirm')}
           </button>
