@@ -171,7 +171,7 @@ export default function Landing() {
                           <ChevronUp size={16} className="text-[#D32F2F]" />
                           <span className="text-[#D32F2F] font-bold text-sm">{issue.vote_count || 0} votes</span>
                         </div>
-                        <CallInSchedule />
+                        <CallInSchedule weekOffset={idx} />
                       </>
                     ) : (
                       <div className="text-gray-600 text-sm italic">No issue yet — submit yours!</div>
