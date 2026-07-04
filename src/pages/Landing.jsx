@@ -88,7 +88,9 @@ export default function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#2D2D2D]/95 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/6a47d74833e614b0c8920a23/ae1416151_KCXU92_7FMLogo_TransparentBackground.png" alt="KCXU 92.7 FM" className="h-12 w-auto" />
+            <div className="w-9 h-9 bg-[#D32F2F] rounded-full flex items-center justify-center">
+              <Radio size={18} className="text-white" />
+            </div>
             <div>
               <div className="font-black text-white text-sm leading-none">KCXU 92.7 FM</div>
               <div className="text-[#D32F2F] text-[9px] font-semibold tracking-widest uppercase">Santa Clara County</div>
@@ -382,7 +384,9 @@ export default function Landing() {
       <footer className="bg-[#1a1a1a] border-t border-white/10 py-10">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/6a47d74833e614b0c8920a23/ae1416151_KCXU92_7FMLogo_TransparentBackground.png" alt="KCXU 92.7 FM" className="h-16 w-auto" />
+            <div className="w-9 h-9 bg-[#D32F2F] rounded-full flex items-center justify-center">
+              <Radio size={18} className="text-white" />
+            </div>
             <div>
               <div className="font-black text-white">KCXU 92.7 FM</div>
               <div className="text-[#D32F2F] text-xs">{t(lang, 'footer_tagline')}</div>

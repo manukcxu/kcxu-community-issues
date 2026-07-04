@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import StreamingAvatar, { AvatarQuality, StreamingEvents, TaskType } from '@heygen/streaming-avatar';
 import { base44 } from '@/api/base44Client';
 
 export default function HeygenAvatarSession({ onSpeakReady }) {
@@ -11,8 +10,11 @@ export default function HeygenAvatarSession({ onSpeakReady }) {
     let mounted = true;
     const start = async () => {
       try {
-        const res = await base44.functions.invoke('heygenToken', {});
+        const res = await base44.functions.invoke('heygenSession', {});
         const { token, avatar_id } = res.data;
+        const mod = await import(/* @vite-ignore */ 'https://esm.sh/@heygen/streaming-avatar@2.1.1');
+        const StreamingAvatar = mod.default;
+        const { AvatarQuality, StreamingEvents } = mod;
         const avatar = new StreamingAvatar({ token });
         avatarRef.current = avatar;
         avatar.on(StreamingEvents.STREAM_READY, (event) => {
@@ -25,7 +27,7 @@ export default function HeygenAvatarSession({ onSpeakReady }) {
         await avatar.createStartAvatar({ quality: AvatarQuality.Medium, avatarName: avatar_id });
         if (mounted && onSpeakReady) {
           onSpeakReady(async (text) => {
-            try { await avatar.speak({ text, taskType: TaskType.REPEAT }); } catch (e) { console.error(e); }
+            try { await avatar.speak({ text, taskType: 'repeat' }); } catch (e) { console.error(e); }
           });
         }
       } catch (e) {
@@ -48,7 +50,7 @@ export default function HeygenAvatarSession({ onSpeakReady }) {
               <p className="text-gray-400 text-sm">Connecting to KCXU Avatar Host...</p>
             </div>
           ) : (
-            <p className="text-gray-400 text-sm px-6 text-center">Avatar host is unavailable right now — you can continue by text below.</p>
+            <p className="text-gray-400 text-sm px-6 text-center">The avatar host is unavailable right now — you can continue by text below.</p>
           )}
         </div>
       )}
