@@ -160,8 +160,16 @@ export default function Landing() {
               {[0, 1, 2].map(idx => {
                 const issue = top3[idx];
                 return (
-                  <div key={idx} className={`rounded-3xl border-2 p-6 h-full ${idx === 0 ? 'border-[#D32F2F] bg-[#D32F2F]/10' : 'border-white/10 bg-white/5'}`}>
-                    <div className={`text-5xl font-black mb-4 ${idx === 0 ? 'text-[#D32F2F]' : 'text-gray-600'}`}>#{idx + 1}</div>
+                  <div key={idx} className={`rounded-3xl border-2 p-6 h-full ${idx === 0 ? 'border-[#D32F2F] bg-[#1a1a1a]' : 'border-white/20 bg-[#1a1a1a]'}`}>
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <div className={`text-5xl font-black ${idx === 0 ? 'text-[#D32F2F]' : 'text-gray-300'}`}>#{idx + 1}</div>
+                      {idx === 0 && (
+                        <a href="tel:+14085061772" className="flex items-center gap-2 bg-[#D32F2F] text-white rounded-xl px-3 py-2 hover:bg-[#B71C1C] transition-colors">
+                          <Phone size={14} />
+                          <span className="text-[11px] font-bold leading-tight">Call In Live<br />Mon &amp; Fri • 8–9 PM PT</span>
+                        </a>
+                      )}
+                    </div>
                     {issue ? (
                       <>
                         <h3 className="text-white font-bold text-lg mb-2 leading-snug">{issue.title}</h3>
