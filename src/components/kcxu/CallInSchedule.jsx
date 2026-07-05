@@ -21,11 +21,11 @@ export default function CallInSchedule({ weekOffset = 0, lang = 'en' }) {
       <div className="space-y-1 text-sm">
         <div className="flex items-center justify-between gap-2">
           <span className="text-white font-bold">{monday}</span>
-          <span className="text-gray-300">{t(lang, 'schedule_times')}</span>
+          <span className="text-gray-300">{t(lang, 'schedule_morning')} & {t(lang, 'schedule_evening')}</span>
         </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-white font-bold">{friday}</span>
-          <span className="text-gray-300">{t(lang, 'schedule_times')}</span>
+          <span className="text-gray-300">{t(lang, 'schedule_morning')} & {t(lang, 'schedule_evening')}</span>
         </div>
       </div>
     </a>
