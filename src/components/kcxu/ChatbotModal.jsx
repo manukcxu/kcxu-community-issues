@@ -5,34 +5,29 @@ import { base44 } from '@/api/base44Client';
 import { base44 as sdk } from '@/api/base44Client';
 import HeygenAvatarSession from './HeygenAvatarSession';
 
-const STEPS = ['greeting', 'residency', 'name', 'phone', 'song_ask', 'song_details', 'confirm'];
+const GREETING = "Hi! Welcome to KCXU Connect. Thanks for calling in to share your voice. May I have your name please?";
+const CLOSING = "Your voice matters. We may feature your comments on our broadcast. Thank you for calling KCXU Connect.";
+const FALLBACK_TOPIC = "the top issues facing Santa Clara County this week";
 
 export default function ChatbotModal({ lang, mode, verification, onClose, onQueued }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [step, setStep] = useState('greeting');
-  const [userData, setUserData] = useState({
-    name: verification?.name || '',
-    phone: verification?.phone || '',
-    wantsSong: false,
-    songTitle: '',
-    songArtist: ''
-  });
+  const [step, setStep] = useState('name');
+  const [userData, setUserData] = useState({ name: '' });
+  const [weeklyTopic, setWeeklyTopic] = useState(FALLBACK_TOPIC);
   const [listening, setListening] = useState(false);
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
   const recognitionRef = useRef(null);
 
   const speakRef = useRef(null);
-  const announcedRef = useRef(false);
-
-  const AVATAR_ANNOUNCEMENT = 'Welcome to KCXU 92.7 FM! Community issues are voiced live every Monday and Friday for one hour, covering the current issues facing our community. Any resident of Santa Clara County over 18 years old may voice their opinion on air.';
+  const greetedRef = useRef(false);
 
   const handleSpeakReady = (fn) => {
     speakRef.current = fn;
-    if (!announcedRef.current) {
-      announcedRef.current = true;
-      addMsg('bot', AVATAR_ANNOUNCEMENT);
+    if (!greetedRef.current) {
+      greetedRef.current = true;
+      addMsg('bot', GREETING);
     }
   };
 
@@ -42,17 +37,19 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
   };
 
   useEffect(() => {
-    setTimeout(() => addMsg('bot', t(lang, 'chatbot_greeting')), 400);
-    setTimeout(() => {
-      if (verification) {
-        addMsg('bot', lang === 'en'
-          ? `I see you're already verified, ${verification.name}! Would you like to make a song request before joining the queue?`
-          : t(lang, 'chatbot_greeting'));
-        setStep('song_ask');
-      } else {
-        setStep('residency');
-      }
-    }, 900);
+    const loadTopic = async () => {
+      try {
+        const pinned = await base44.entities.CommunityIssue.filter({ status: 'approved', is_pinned: true }, 'pin_rank', 1);
+        if (pinned.length > 0) setWeeklyTopic(pinned[0].title);
+      } catch (err) { /* keep fallback topic */ }
+    };
+    loadTopic();
+    if (mode !== 'avatar') {
+      setTimeout(() => {
+        greetedRef.current = true;
+        addMsg('bot', GREETING);
+      }, 400);
+    }
   }, []);
 
   useEffect(() => {
@@ -71,68 +68,36 @@ export default function ChatbotModal({ lang, mode, verification, onClose, onQueu
     setLoading(true);
     await new Promise(r => setTimeout(r, 600));
 
-    if (step === 'residency') {
-      const yes = /yes|si|có|是|oo|yeah|y/i.test(text);
-      if (yes) {
-        addMsg('bot', lang === 'en' ? 'Great! What\'s your name?' : t(lang, 'form_name') + '?');
-        setStep('name');
-      } else {
-        addMsg('bot', lang === 'en' ? 'Sorry, this service is for Santa Clara County residents only.' : t(lang, 'residency_declare'));
-        setTimeout(onClose, 2000);
-      }
-    } else if (step === 'name') {
-      setUserData(d => ({ ...d, name: text }));
-      addMsg('bot', lang === 'en' ? `Nice to meet you, ${text}! What\'s your phone number?` : t(lang, 'form_phone') + '?');
-      setStep('phone');
-    } else if (step === 'phone') {
-      setUserData(d => ({ ...d, phone: text }));
-      addMsg('bot', lang === 'en' ? 'Would you like to request a song? (yes/no)' : t(lang, 'song_btn') + '?');
-      setStep('song_ask');
-    } else if (step === 'song_ask') {
-      const yes = /yes|si|có|是|oo|yeah|y/i.test(text);
-      if (yes) {
-        addMsg('bot', lang === 'en' ? 'What song and artist would you like to request?' : t(lang, 'form_song'));
-        setStep('song_details');
-      } else {
-        await submitToQueue({ ...userData, wantsSong: false });
-      }
-    } else if (step === 'song_details') {
-      setUserData(d => ({ ...d, songTitle: text, wantsSong: true }));
-      addMsg('bot', lang === 'en' ? "Got it! What's the artist's name?" : t(lang, 'form_artist') + '?');
-      setStep('song_artist');
-    } else if (step === 'song_artist') {
-      await submitToQueue({ ...userData, songTitle: userData.songTitle, songArtist: text, wantsSong: true });
+    if (step === 'name') {
+      const callerName = text;
+      setUserData(d => ({ ...d, name: callerName }));
+      addMsg('bot', `Thanks, ${callerName}. I've got that.`);
+      await new Promise(r => setTimeout(r, 500));
+      addMsg('bot', `This week we're hearing from community members about ${weeklyTopic}. What's your opinion on this?`);
+      setStep('opinion');
+    } else if (step === 'opinion') {
+      const callerName = userData.name;
+      addMsg('bot', `Thanks for sharing that, ${callerName}.`);
+      await new Promise(r => setTimeout(r, 500));
+      addMsg('bot', CLOSING);
+      await submitOpinion(callerName, text);
     }
     setLoading(false);
   };
 
-  const submitToQueue = async (data) => {
+  const submitOpinion = async (name, opinionText) => {
     try {
-      const existing = await base44.entities.CallerQueue.filter({ phone: data.phone, status: 'queued' });
-      if (existing.length > 0) {
-        addMsg('bot', lang === 'en' ? `You\'re already in the queue at position #${existing[0].queue_position}!` : t(lang, 'success_callin'));
-        onQueued && onQueued(existing[0]);
-        return;
-      }
-      const allQueued = await base44.entities.CallerQueue.filter({ status: 'queued' });
-      const position = allQueued.length + 1;
-      const record = await base44.entities.CallerQueue.create({
-        name: data.name || verification?.name,
-        phone: data.phone || verification?.phone,
-        language: lang,
-        connection_type: 'webrtc',
-        song_request_artist: data.songArtist || '',
-        song_request_title: data.songTitle || '',
-        status: 'queued',
-        queue_position: position,
-        residency_declared: true,
-        chatbot_mode: mode
+      const record = await base44.entities.CommunityIssue.create({
+        title: weeklyTopic,
+        description: opinionText,
+        submitter_name: name,
+        submitter_phone: verification?.phone || '',
+        submitter_language: lang
       });
-      addMsg('bot', `${t(lang, 'success_callin')} ${t(lang, 'queue_position')}: #${position}`);
       onQueued && onQueued(record);
       setStep('done');
     } catch (err) {
-      addMsg('bot', lang === 'en' ? 'Something went wrong. Please try again.' : 'Error. Try again.');
+      addMsg('bot', 'Something went wrong. Please try again.');
     }
   };
 

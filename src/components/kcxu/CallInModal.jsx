@@ -12,10 +12,9 @@ export default function CallInModal({ lang, verification, onClose, initialMode =
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
         <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-8 text-center">
           <div className="w-16 h-16 bg-[#D32F2F] rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-black text-2xl">#{queued.queue_position}</span>
+            <MessageSquare className="text-white" size={28} />
           </div>
           <h3 className="text-[#2D2D2D] font-black text-xl mb-2">{t(lang, 'success_callin')}</h3>
-          <p className="text-gray-500 text-sm">{t(lang, 'queue_position')}: #{queued.queue_position}</p>
           <button onClick={onClose} className="mt-6 w-full bg-[#2D2D2D] text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition-colors">
             {t(lang, 'form_cancel')}
           </button>
