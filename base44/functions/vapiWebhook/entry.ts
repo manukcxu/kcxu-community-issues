@@ -1,6 +1,17 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.38';
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
+    });
+  }
+
   const authHeader = req.headers.get("Authorization");
   const expectedToken = Deno.env.get("VAPI_BEARER_TOKEN");
 
